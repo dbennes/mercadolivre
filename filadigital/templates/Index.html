@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'partials/menu.html' %}
+
+                <div class="container-fluid">
+                    <div class="row d-flex d-xxl-flex justify-content-center align-items-center justify-content-xxl-center align-items-xxl-center mb-3">
+                        <div class="col-12 col-lg-8" style="width: 90%;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card shadow mb-3 border-0">
+                                        <div class="card-header py-3 border-0" style="background-color: #2c2c2a;">
+                                            <p class="m-0 fw-bold" style="color: rgb(145,145,145);">Minhas Filas</p>
+                                        </div>
+                                        <div class="card-body" style="background-color: #383838;">
+                                            <form>
+                                                <div class="row">
+                                                    <div class="col d-lg-flex flex-column justify-content-lg-center align-items-lg-center">       
+
+                                                    {% if filas %}
+                                                    {% for filas in filas %}
+
+                                                        <a href="{% url 'fila' filas.id %}" style="width: 80%;color: rgb(155,163,186);margin-bottom: 11px;text-decoration: none;">
+                                                            <div class="card border-0" style="width: 100%;">
+                                                                <div class="card-body" style="background-color: #363434">
+                                                                    <div class="row">
+                                                                        <div class="col-2 d-flex justify-content-center align-items-center" style="border-right: 1px solid rgb(184,181,181) ;"><i class="fa fa-building" style="font-size: 29px;"></i></div>
+                                                                        <div class="col d-lg-flex justify-content-lg-start align-items-lg-center">
+                                                                            <div>
+                                                                                <h4 style="font-size: 16px;"> {{ filas.site }} - {{ filas.empresa }} A&nbsp;</h4>
+                                                                                <h6 class="text-muted mb-2" style="font-size: 12px;">Clique para ver mais informações</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    
+                                                    {% endfor %}
+                                                    {% else %}
+                                               
+
+
+                                                    {% endif%}
+                                                </div>
+                                                </div>
+
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+                <div class="container-fluid">
+                    <div class="row d-flex d-xxl-flex justify-content-center align-items-center justify-content-xxl-center align-items-xxl-center mb-3">
+                        <div class="col-12 col-lg-8" style="width: 90%;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card shadow mb-3 border-0" style="background-color: #2c2c2a;">
+                                        <div class="card-header py-3 border-0" style="background-color: #2c2c2a;">
+                                            <p class="m-0 fw-bold" >Inserir Pessoas</p>
+                                        </div>
+                                        <div class="card-body border-0" style="background-color: #383838;">
+
+                                            <form action="{% url 'adicionar_pessoas' %}" method="POST">
+
+                                                {% csrf_token %}
+                                                
+                                                <div class="row">
+                                                    <div class="col d-lg-flex justify-content-lg-center align-items-lg-center">
+                                                        <div  class="card border-0 d-lg-flex justify-content-lg-start align-items-lg-center" style="margin-top: 3%;margin-bottom: 3%;width: 75%; background-color: #343433;">
+                                                            <div class="card-header py-3 border-0"  style="width: 100%; background-color: #2c2c2a;">
+                                                                <p class="m-0 fw-bold" style="color: rgb(170,162,162);">Adicionar Dados</p>
+                                                            </div>
+                                                            <div class="card-body" style="width: 95%;" >
+
+                                                                <div class="mb-3">
+                                                                    <input value="{{ vagas.vagas }}" style="background-color: #4a4a4a;" class="form-control border-0" type="text" id="fila" name="fila">
+                                                                </div>
+
+
+                                                                <div class="mb-3">
+                                                                    <label class="form-label" for="username">
+                                                                        <strong>Nome Completo</strong>
+                                                                    </label>
+                                                                    <input style="background-color: #4a4a4a;" class="form-control border-0" type="text" id="nome" placeholder="Nome Completo" name="nome">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label" for="email">
+                                                                        <strong>Celular</strong>
+                                                                    </label>
+                                                                    <input style="background-color: #4a4a4a;" class="form-control border-0" type="text" id="celular" name="celular" placeholder="Celular">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label" for="email">
+                                                                        <strong>Vaga</strong>
+                                                                    </label>
+                                                                    <select style="background-color: #4a4a4a;"  class="form-select border-0" aria-label="Default select example" id="vaga" name="vaga">
+                                                                        
+                                                                        {% if vagas %}
+                                                                        {% for vagas in vagas %}
+                                                                        
+                                                                        <option value="{{ vagas.vagas }}">{{ vagas.vagas }}</option>
+                                                                        
+                                                                        {% endfor %}
+                                                                        {% endif %}
+
+
+                                                                    </select>    
+                                                                </div><br>
+                                                                <div class="d-flex d-xxl-flex justify-content-end align-items-center justify-content-xxl-end mb-3" style="margin-top: 8px;"><button class="btn btn-sm" type="submit" style="background: #81ea5d;color: rgb(255,255,255);font-size: 16px;"><i class="fa fa-whatsapp"></i>&nbsp;Inserir e Notificar</button></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %}

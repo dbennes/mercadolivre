@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid d-flex justify-content-center align-items-center" style="height:90vh; background-color: #262626;">
+
+                <div style="width: 80%;" class="container-fluid d-xxl-flex justify-content-xxl-center align-items-xxl-center">
+                    <div class="card shadow border-0" style="with:60%">
+                        <div class="card-header py-3 border-0" style="background-color: #2c2c2a;">
+                            <p class="m-0 fw-bold">USÚARIO: {{ books.nome_usuario }}</p>
+                        </div>
+                        <div class="card-body border-0" style="background-color: #383838;">
+                            <div class="card border-0" style="background-color: #383838;">
+                                <div class="card-body d-flex justify-content-center">
+                                    <div class="row d-flex justify-content-center" style="width: 80%;">
+                                        <div style="margin-bottom: 15px" class="col  d-flex d-xxl-flex flex-column justify-content-center align-items-center justify-content-xxl-center align-items-xxl-center">
+                                            <h2 style="font-weight: 650; font-size: 50px">{{ posicaofila }}</h2>
+                                            <h6 class="text-center">Posição na Fila</h6>
+                                            
+                                        </div></br>
+                                        <div class="col  d-flex d-xxl-flex flex-column justify-content-center align-items-center justify-content-xxl-center align-items-xxl-center" style="background-color: #383838;">
+                                            <h2 style="font-weight: 650; font-size: 50px">{{books.vaga}}</h2>
+                                            <h6 class="text-center">Vaga</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{{books.fila}}
+<br>
+{{books.nome_usuario}}
+<br>
+{{books.posicao}}
+<br>
+{{books.vaga}}
