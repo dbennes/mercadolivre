@@ -17,4 +17,9 @@ urlpatterns = [
     path('api', include(router.urls)),
     path('deleta/<int:usuario_id>',  views.deleta_usuario, name='deleta_usuario'),
     path('atualiza/<int:usuario_id>',  views.atualiza, name='atualiza'),
+    path('login', views.login, name='login'),
+    path('dashboard', views.dashboard, name='dashboard'),
+    path('logout', views.logout, name='logout'),
+    path('mudar_status/<int:usuario_id>', views.mudar_status, name='mudar_status'),
+    
 ]

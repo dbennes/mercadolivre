@@ -34,16 +34,25 @@
                                                             {% for fila_aguardando in fila_aguardando %}
 
                                                             <div class="row">
+                                                                <div class="col d-flex justify-content-center align-items-center">
+                                                                    <h4 class="text-center" style="font-size: 16.376px; ">{{ fila_aguardando.posicao }}
+                                                                </div>
                                                                 <div class="col d-flex justify-content-center align-items-center" style="font-size: 16px;">
                                                                     <h4 class="d-lg-flex justify-content-center align-items-center" style="font-size: 16px;">{{ fila_aguardando.nome_usuario }}</h4>
                                                                 </div>
-                                                                <div class="col d-lg-flex justify-content-lg-center align-items-lg-center" style="font-size: 16px;">
-                                                                    <h4 class="text-center" style="font-size: 16.376px; ">{{ fila_aguardando.posicao }}
-                                                                     <a  style=" " href="{% url 'atualiza' fila_aguardando.id %}" class="btn btn-danger">
-                                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                                    </a>
-                                                                    </h4>
+                                                                <div class="col d-flex justify-content-center align-items-center" style="font-size: 16px;">
+                                                                    <h4 class="d-lg-flex justify-content-center align-items-center" style="font-size: 16px;">{{ fila_aguardando.placa }}</h4>
                                                                 </div>
+                                                                <div class="col d-lg-flex justify-content-lg-center align-items-lg-center" style="font-size: 16px;">
+                                                                    <form action="{% url 'atualiza' fila_aguardando.id %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input class="form-control" type="text" value="{{ fila.id }}" placeholder="{{ fila.id }}" name="id_fila" style="pointer-events: none; display: none">
+                                                                        <button class="btn rounded-0 " type="submit" style=" background:#2c2c2a" >
+                                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                                
                                                             </div>
                                                             
                                                             {% endfor %}
@@ -94,7 +103,7 @@
                                                                             <div class="card-body" style="width: 95%;" >
                 
                                                                                 <div class="mb-3">
-                                                                                    <input value="{{ fila.id }}" style="background-color: #4a4a4a; pointer-events: none;" class="form-control border-0" type="text" id="fila" name="fila">
+                                                                                    <input value="{{ fila.id }}" style="background-color: #4a4a4a; pointer-events: none; display: none" class="form-control border-0" type="text" id="fila" name="fila">
                                                                                 </div>
                 
                 
@@ -109,6 +118,12 @@
                                                                                         <strong>Celular</strong>
                                                                                     </label>
                                                                                     <input style="background-color: #4a4a4a;" class="form-control border-0" type="text" id="celular" name="celular" placeholder="Celular">
+                                                                                </div>
+                                                                                <div class="mb-3">
+                                                                                    <label class="form-label" for="email">
+                                                                                        <strong>Placa</strong>
+                                                                                    </label>
+                                                                                    <input style="background-color: #4a4a4a;" class="form-control border-0" type="text" id="placa" name="placa" placeholder="Placa">
                                                                                 </div>
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label" for="email">

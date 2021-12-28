@@ -8,6 +8,7 @@ class Fila(models.Model):
     nome_fila = models.CharField(max_length=200)
     vaga = models.CharField(max_length=200);
     site = models.CharField(max_length=200);
+    status = models.CharField(max_length=200);
     
     def __str__(self):
         return self.empresa

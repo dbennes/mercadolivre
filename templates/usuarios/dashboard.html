@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'partials/menu.html' %}
+
+                <div class="container-fluid">
+                    <div class="row d-flex d-xxl-flex justify-content-center align-items-center justify-content-xxl-center align-items-xxl-center mb-3">
+                        <div class="col-12 col-lg-8" style="width: 90%;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card shadow mb-3 border-0">
+                                        <div class="card-header py-3 border-0" style="background-color: #2c2c2a;">
+                                            <p class="m-0 fw-bold" style="color: rgb(145,145,145);">Minhas Filas</p>
+                                        </div>
+                                        <div class="card-body" style="background-color: #383838;">
+                                            
+                                                <div class="row">
+                                                    <div class="col d-lg-flex flex-column justify-content-lg-center align-items-lg-center">       
+
+                                                    {% if filas %}
+                                                    {% for filas in filas %}
+
+                                                        
+                                                            <div class="card border-0" style="width: 100%; background-color: #363434; margin-bottom: 11px;">
+                                                                <div class="card-body" style="background-color: #363434">
+                                                                    <div class="row d-flex" style="width:100%;">
+                                                                        <div class="col-3 d-flex justify-content-center align-items-center">
+                                                                            <div class="align-items-center">
+                                                                                <i class="fa fa-building" style="font-size: 29px;"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-6 ">
+                                                                            <a class="d-flex flex-row justify-content-start align-items-center" href="{% url 'fila' filas.id %}" style=" color: rgb(155,163,186);margin-bottom: 11px;text-decoration: none;">
+                                                                                <div class="col-10" style="margin-left: 16px; ">
+                                                                                    <h4 style="font-size: 16px;"> {{ filas.site }} - {{ filas.empresa }} A&nbsp;</h4>
+                                                                                </div>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="col-3 d-flex justify-content-center align-items-center flex-nowrap">
+                                                                            <form class="d-flex" action="{% url 'mudar_status' filas.id %}" method="POST">
+                                                                                {% csrf_token %}
+                                                                                <select id="status" name="status" class="form-control text-center  border-0 rounded-0" style=" background: #262626; color: #57fb4a;">
+                                                                                    <option value="{{ filas.status }}" >{{ filas.status }}</option>
+                                                                                    <option value="Solicitado">Solicitado</option>
+                                                                                    <option value="Aguardando">Aguardando</option>
+                                                                                    <option value="Pronto">Pronto</option>
+                                                                                    <option value="Enviado">Enviado</option>
+                                                                                    <option value="Vazio">Vazio</option>
+                                                                                </select>
+                                                                                <button class="btn rounded-0 " type="submit" style=" background:#2c2c2a" >
+                                                                                    <i class="fas fa-paper-plane"></i>
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                       
+                                                    
+                                                    {% endfor %}
+                                                    {% else %}
+                                               
+
+
+                                                    {% endif%}
+                                                    </div>
+                                                </div>
+
+
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+{% endblock %}

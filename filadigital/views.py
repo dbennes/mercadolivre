@@ -3,6 +3,8 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import request
 from rest_framework.serializers import Serializer
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 from ordemfila.models import ordem_fila
 from fila.models import vaga_fila
@@ -15,16 +17,58 @@ import requests
 
 # Create your views here.
 
+def login (request):
+    
+    if request.method == 'POST':
+        email = request.POST['email']
+        senha = request.POST['senha']
+        
+        if  email == "" or senha == "":
+            print('Os campos estão vazios.')
+            return redirect ('login')
+        
+        #print(email, senha)
+        
+        if User.objects.filter(email=email).exists():
+            nome = User.objects.filter(email=email).values_list('username', flat=True).get()
+            
+            user = auth.authenticate(request, username=nome, password=senha)
+            
+            if user is not None:
+                auth.login(request, user)
+                print ("Login realizado")
+                
+                return redirect ('dashboard')
+    
+    return render(request, 'usuarios/login.html')
+
+def logout(request):
+    auth.logout(request)
+    
+    return redirect ('login')
+
+def  dashboard (request):
+    if request.user.is_authenticated:
+        
+        filas = Fila.objects.all()
+        
+        dados = {
+            'filas' : filas
+        }
+        
+        return render(request, 'usuarios/dashboard.html', dados)
+    
+    else:
+        return redirect ('login')
+    
 def index (request):
+    if request.user.is_authenticated:
     
-    filas = Fila.objects.all()
+        
+        return redirect ('dashboard')
     
-    dados = {
-        'filas' : filas
-    }
-    
-    
-    return render (request ,'Index.html', dados)
+    else:
+        return redirect ('login')
     
 def fila (request, fila_id):
     
@@ -59,6 +103,7 @@ def adicionar_pessoas(request):
         nome = request.POST ['nome']
         celular = request.POST ['celular']
         vaga = request.POST ['vaga']
+        placa = request.POST ['placa']
         posicao2 = 1
         posicao3 = 1
         
@@ -79,7 +124,7 @@ def adicionar_pessoas(request):
             ultima = UltimaPosicao['id']
             posicao_fila = ultima + 1
             
-            salvarFila = ordem_fila.objects.create(fila=fila, nome_usuario=nome, celular_usuario=celular, posicao=novaPosicao, vaga=vaga, posicao2 = posicao2, posicao3 = posicao3 )
+            salvarFila = ordem_fila.objects.create(fila=fila, nome_usuario=nome, celular_usuario=celular, posicao=novaPosicao, vaga=vaga, posicao2 = posicao2, posicao3 = posicao3, placa=placa )
             salvarFila.save()
             
             print("Salvo..")
@@ -92,7 +137,7 @@ def adicionar_pessoas(request):
             posicao = 0
             posicao_fila = 1
             
-            salvarFila = ordem_fila.objects.create(fila=fila, nome_usuario=nome, celular_usuario=celular, posicao=posicao, vaga=vaga, posicao2 = posicao2, posicao3 = posicao3)
+            salvarFila = ordem_fila.objects.create(fila=fila, nome_usuario=nome, celular_usuario=celular, posicao=posicao, vaga=vaga, posicao2 = posicao2, posicao3 = posicao3, placa = placa)
             salvarFila.save()
             
             print("Salvo..")    
@@ -162,22 +207,69 @@ def deleta_usuario(request, usuario_id):
     return redirect('index')
 
     
+#METODO USADO PARA ATUALIZAR A POSIÇÃO DOS USUARIOS NA FILA
+def atualiza(request, usuario_id):
+    
+   
+    if request.method == 'POST':
+            
+        id_fila = request.POST ['id_fila']
+        
+        #AQUI ENCONTRO A ULTIMA POSIÇÃO DA FILA DE ACORDO COM O CLIENTE EM ESPERA
+        ver = ordem_fila.objects.filter(pk=usuario_id).values('fila').last()
+        
+        #SEPARO E PEGO O VALOR DO DISCIONARIO
+        id_fila = ver['fila']
+        id = str(id_fila)
+        
+        #AQUI PEGO A POSIÇÃO PARA COMPARAR E FAZER AS ATUALIZAÇÕES, CASO CONTRARIO ELE ATUALIZA TUDO
+        posicao = ordem_fila.objects.filter(pk=usuario_id).values_list('posicao', flat=True).get()
+        
+        #CONTO O TOTAL DE PESSOAS NA FILA PARA COMPARAR NO PROXIMO IF
+        totalPessoasFila = ordem_fila.objects.filter(fila=id_fila, posicao3=1).count()
+        
+        soma_posicao = posicao + 1
+        
+        if soma_posicao == totalPessoasFila: 
+            
+            ordem_fila.objects.filter(fila=id, posicao__gt = 0, posicao = soma_posicao).update(posicao=F('posicao') - soma_posicao)
+            
+            usuario = get_object_or_404(ordem_fila, pk=usuario_id)
+            usuario.posicao3 = 0
+            usuario.save()
+            
+            print("deletado")
+                    
+        else:
+            
+            ordem_fila.objects.filter(fila=id, posicao__gt = 0).update(posicao=F('posicao') - 1)
+            
+            usuario = get_object_or_404(ordem_fila, pk=usuario_id)
+            usuario.posicao3 = 0
+            usuario.save()
 
-def atualiza(request,  usuario_id):
-    
-    ver = ordem_fila.objects.filter(pk=usuario_id).values('fila').last()
-    id_fila = ver['fila']
-    id = str(id_fila)
-    
-    ordem_fila.objects.filter(fila=id).update(posicao=F('posicao') - 1)
-    
-    print(id)
-    
-    usuario = get_object_or_404(ordem_fila, pk=usuario_id)
-    usuario.posicao3 = 0
-    usuario.save()
+            print("Atualizado") 
 
-    return redirect('index')
+        
+
+        return redirect('index')
+
+def mudar_status(request, usuario_id):
+    
+    ver = Fila.objects.filter(pk=usuario_id).values('id').last()
+    idx = ver['id']
+    id = str(idx)
+    
+    
+    
+    if request.method == 'POST':
+        status2 = request.POST ['status']
+
+        Fila.objects.filter(pk=id).update(status=status2)
+        
+        
+    
+    return redirect('dashboard')
 
 class ordemViewset (viewsets.ModelViewSet):
         

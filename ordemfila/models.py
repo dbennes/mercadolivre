@@ -13,6 +13,7 @@ class ordem_fila(models.Model):
     posicao2 = models.IntegerField(blank=True, null=True)
     posicao3 = models.IntegerField(blank=True, null=True)
     vaga = models.CharField(max_length=200)
+    placa = models.CharField(max_length=200)
     
     def __str__(self):
         return self.nome_usuario
